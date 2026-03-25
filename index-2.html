@@ -1,0 +1,997 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Rohan Sarkar</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@300;400;500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #f7f6f2;
+      --ink: #1a1a18;
+      --accent: #2d6a4f;
+      --accent-light: #b7e4c7;
+      --muted: #8a8880;
+      --line: #dddbd4;
+      --card: #ffffff;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--ink);
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 300;
+      line-height: 1.7;
+      overflow-x: hidden;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.2rem 4rem;
+      background: rgba(247,246,242,0.88);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid transparent;
+      transition: border-color 0.4s, box-shadow 0.4s;
+    }
+
+    nav.scrolled {
+      border-bottom-color: var(--line);
+      box-shadow: 0 2px 20px rgba(0,0,0,0.04);
+    }
+
+    .nav-logo {
+      font-family: 'DM Serif Display', serif;
+      font-size: 1.2rem;
+      letter-spacing: 0.01em;
+      color: var(--ink);
+      text-decoration: none;
+      opacity: 0;
+      transform: translateY(-10px);
+      animation: navFadeIn 0.6s 0.2s forwards;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 2.5rem;
+      list-style: none;
+    }
+
+    .nav-links li {
+      opacity: 0;
+      transform: translateY(-10px);
+      animation: navFadeIn 0.6s forwards;
+    }
+    .nav-links li:nth-child(1) { animation-delay: 0.3s; }
+    .nav-links li:nth-child(2) { animation-delay: 0.4s; }
+    .nav-links li:nth-child(3) { animation-delay: 0.5s; }
+    .nav-links li:nth-child(4) { animation-delay: 0.6s; }
+    .nav-links li:nth-child(5) { animation-delay: 0.7s; }
+
+    @keyframes navFadeIn {
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .nav-links a {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.75rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--muted);
+      text-decoration: none;
+      transition: color 0.2s;
+      position: relative;
+    }
+    .nav-links a::after {
+      content: '';
+      position: absolute;
+      bottom: -2px; left: 0;
+      width: 0; height: 1px;
+      background: var(--accent);
+      transition: width 0.25s;
+    }
+    .nav-links a:hover { color: var(--accent); }
+    .nav-links a:hover::after { width: 100%; }
+
+    /* ── HERO ── */
+    #hero {
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      align-items: center;
+      padding: 8rem 4rem 4rem;
+      gap: 4rem;
+    }
+
+    .hero-tag {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.72rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      opacity: 0;
+      animation: fadeUp 0.7s 0.3s forwards;
+    }
+    .hero-tag::before {
+      content: '';
+      display: inline-block;
+      width: 0; height: 1px;
+      background: var(--accent);
+      animation: lineGrow 0.5s 0.9s forwards;
+    }
+    @keyframes lineGrow { to { width: 28px; } }
+
+    h1 {
+      font-family: 'DM Serif Display', serif;
+      font-size: clamp(3rem, 6vw, 5.5rem);
+      line-height: 1.05;
+      letter-spacing: -0.02em;
+      color: var(--ink);
+      margin-bottom: 1.5rem;
+      opacity: 0;
+      animation: fadeUp 0.8s 0.5s forwards;
+    }
+    h1 em { font-style: italic; color: var(--accent); }
+
+    .hero-sub {
+      font-size: 1.05rem;
+      color: var(--muted);
+      max-width: 420px;
+      margin-bottom: 2.5rem;
+      line-height: 1.75;
+      opacity: 0;
+      animation: fadeUp 0.8s 0.7s forwards;
+    }
+
+    .hero-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      background: var(--ink);
+      color: var(--bg);
+      padding: 0.85rem 1.8rem;
+      text-decoration: none;
+      font-family: 'DM Mono', monospace;
+      font-size: 0.75rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      transition: background 0.2s, gap 0.2s;
+      opacity: 0;
+      animation: fadeUp 0.8s 0.9s forwards;
+    }
+    .hero-cta:hover { background: var(--accent); gap: 1rem; }
+
+    .hero-visual {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      align-items: flex-end;
+    }
+
+    .stat-card {
+      background: var(--card);
+      border: 1px solid var(--line);
+      padding: 1.4rem 2rem;
+      width: 260px;
+      opacity: 0;
+      transform: translateX(30px);
+      animation: slideInRight 0.7s forwards;
+      transition: box-shadow 0.25s, transform 0.25s;
+    }
+    .stat-card:hover {
+      transform: translateX(-4px) !important;
+      box-shadow: 0 6px 24px rgba(45,106,79,0.1);
+    }
+    .stat-card:nth-child(1) { animation-delay: 0.6s; }
+    .stat-card:nth-child(2) { animation-delay: 0.8s; margin-right: 2.5rem; }
+    .stat-card:nth-child(3) { animation-delay: 1.0s; }
+
+    @keyframes slideInRight {
+      to { opacity: 1; transform: translateX(0); }
+    }
+
+    .stat-num {
+      font-family: 'DM Serif Display', serif;
+      font-size: 2.2rem;
+      color: var(--ink);
+      line-height: 1;
+      margin-bottom: 0.3rem;
+    }
+    .stat-label {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.68rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    /* ── SCROLL REVEAL SYSTEM ── */
+    .reveal {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.7s cubic-bezier(0.22,1,0.36,1),
+                  transform 0.7s cubic-bezier(0.22,1,0.36,1);
+    }
+    .reveal.from-left  { transform: translateX(-30px); }
+    .reveal.from-right { transform: translateX(30px); }
+    .reveal.visible    { opacity: 1; transform: translate(0); }
+
+    /* stagger: children animate in sequence */
+    .stagger > * {
+      opacity: 0;
+      transform: translateY(22px);
+      transition: opacity 0.55s cubic-bezier(0.22,1,0.36,1),
+                  transform 0.55s cubic-bezier(0.22,1,0.36,1);
+    }
+    .stagger.visible > *:nth-child(1) { opacity:1; transform:none; transition-delay:0.05s; }
+    .stagger.visible > *:nth-child(2) { opacity:1; transform:none; transition-delay:0.15s; }
+    .stagger.visible > *:nth-child(3) { opacity:1; transform:none; transition-delay:0.25s; }
+    .stagger.visible > *:nth-child(4) { opacity:1; transform:none; transition-delay:0.35s; }
+    .stagger.visible > *:nth-child(5) { opacity:1; transform:none; transition-delay:0.45s; }
+    .stagger.visible > *:nth-child(6) { opacity:1; transform:none; transition-delay:0.55s; }
+
+    /* ── SECTIONS ── */
+    section { padding: 7rem 4rem; }
+
+    .section-header {
+      display: flex;
+      align-items: baseline;
+      gap: 1.5rem;
+      margin-bottom: 4rem;
+      border-bottom: 1px solid var(--line);
+      padding-bottom: 1.5rem;
+    }
+
+    .section-num {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.7rem;
+      letter-spacing: 0.15em;
+      color: var(--accent);
+    }
+
+    h2 {
+      font-family: 'DM Serif Display', serif;
+      font-size: clamp(1.8rem, 3vw, 2.6rem);
+      letter-spacing: -0.02em;
+      color: var(--ink);
+    }
+
+    /* ── ABOUT ── */
+    #about { background: var(--card); }
+
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: 5rem;
+      align-items: start;
+    }
+
+    .about-body { font-size: 1.05rem; color: #3a3a38; line-height: 1.85; }
+    .about-body p + p { margin-top: 1.2rem; }
+
+    .about-details { display: flex; flex-direction: column; gap: 1.5rem; }
+
+    .detail-row {
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+      padding-bottom: 1.2rem;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .detail-label {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.65rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .detail-value { font-size: 0.95rem; color: var(--ink); font-weight: 400; }
+
+    /* ── RESEARCH ── */
+    #research { background: var(--bg); }
+
+    .timeline { display: flex; flex-direction: column; }
+
+    .timeline-item {
+      display: grid;
+      grid-template-columns: 200px 1fr;
+      gap: 2rem;
+      padding: 2.5rem 0;
+      border-bottom: 1px solid var(--line);
+      position: relative;
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 0.65s cubic-bezier(0.22,1,0.36,1),
+                  transform 0.65s cubic-bezier(0.22,1,0.36,1);
+    }
+    .timeline-item.visible { opacity: 1; transform: translateY(0); }
+
+    /* green left bar grows in on reveal */
+    .timeline-item::before {
+      content: '';
+      position: absolute;
+      left: -1.5rem;
+      top: 0; bottom: 0;
+      width: 2px;
+      background: var(--accent-light);
+      transform: scaleY(0);
+      transform-origin: top;
+      transition: transform 0.6s 0.3s cubic-bezier(0.22,1,0.36,1);
+    }
+    .timeline-item.visible::before { transform: scaleY(1); }
+
+    .timeline-meta { padding-top: 0.2rem; }
+
+    .timeline-date {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.68rem;
+      letter-spacing: 0.1em;
+      color: var(--muted);
+      text-transform: uppercase;
+    }
+
+    .timeline-place {
+      font-size: 0.85rem;
+      color: var(--accent);
+      margin-top: 0.3rem;
+      font-weight: 500;
+    }
+
+    .timeline-content h3 {
+      font-family: 'DM Serif Display', serif;
+      font-size: 1.25rem;
+      margin-bottom: 0.75rem;
+    }
+
+    .timeline-content ul {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      margin-top: 0.75rem;
+    }
+
+    .timeline-content ul li {
+      font-size: 0.9rem;
+      color: #555550;
+      padding-left: 1.2rem;
+      position: relative;
+      line-height: 1.65;
+    }
+
+    .timeline-content ul li::before {
+      content: '→';
+      position: absolute;
+      left: 0;
+      color: var(--accent);
+      font-size: 0.8rem;
+    }
+
+    /* ── PROJECTS ── */
+    #projects { background: var(--card); }
+
+    .projects-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 1.5px;
+      background: var(--line);
+      border: 1px solid var(--line);
+    }
+
+    .project-card {
+      background: var(--card);
+      padding: 2.5rem;
+      transition: background 0.25s, transform 0.25s, box-shadow 0.25s;
+      cursor: default;
+    }
+    .project-card:hover {
+      background: #f0faf4;
+      transform: translateY(-4px);
+      position: relative;
+      z-index: 1;
+      box-shadow: 0 10px 30px rgba(45,106,79,0.09);
+    }
+
+    .project-tag {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.62rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 1rem;
+    }
+
+    .project-card h3 {
+      font-family: 'DM Serif Display', serif;
+      font-size: 1.4rem;
+      margin-bottom: 0.75rem;
+      line-height: 1.2;
+    }
+
+    .project-card p { font-size: 0.88rem; color: var(--muted); line-height: 1.7; }
+
+    /* ── COURSEWORK ── */
+    #coursework { background: var(--bg); }
+
+    .coursework-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 2rem;
+    }
+
+    .coursework-item h3 {
+      font-family: 'DM Serif Display', serif;
+      font-size: 1.25rem;
+      margin-bottom: 0.75rem;
+    }
+
+    .coursework-item p {
+      font-size: 0.92rem;
+      color: #555550;
+      line-height: 1.75;
+    }
+
+    .timeline-item.visible { opacity: 1; transform: translateY(0); }
+
+    /* green left bar grows in on reveal */
+    .timeline-item::before {
+      content: '';
+      position: absolute;
+      left: -1.5rem;
+      top: 0; bottom: 0;
+      width: 2px;
+      background: var(--accent-light);
+      transform: scaleY(0);
+      transform-origin: top;
+      transition: transform 0.6s 0.3s cubic-bezier(0.22,1,0.36,1);
+    }
+    .timeline-item.visible::before { transform: scaleY(1); }
+
+    .timeline-meta { padding-top: 0.2rem; }
+
+    .timeline-date {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.68rem;
+      letter-spacing: 0.1em;
+      color: var(--muted);
+      text-transform: uppercase;
+    }
+
+    .timeline-place {
+      font-size: 0.85rem;
+      color: var(--accent);
+      margin-top: 0.3rem;
+      font-weight: 500;
+    }
+
+    .timeline-content h3 {
+      font-family: 'DM Serif Display', serif;
+      font-size: 1.25rem;
+      margin-bottom: 0.75rem;
+    }
+
+    .timeline-content ul {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      margin-top: 0.75rem;
+    }
+
+    .timeline-content ul li {
+      font-size: 0.9rem;
+      color: #555550;
+      padding-left: 1.2rem;
+      position: relative;
+      line-height: 1.65;
+    }
+
+    .timeline-content ul li::before {
+      content: '→';
+      position: absolute;
+      left: 0;
+      color: var(--accent);
+      font-size: 0.8rem;
+    }
+
+    /* ── SKILLS ── */
+    #skills { background: var(--bg); }
+
+    .skills-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 2rem;
+    }
+
+    .skill-group h3 {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.68rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 1rem;
+      padding-bottom: 0.6rem;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .skill-tags { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+
+    .tag {
+      font-size: 0.8rem;
+      padding: 0.3rem 0.75rem;
+      border: 1px solid var(--line);
+      background: var(--card);
+      color: var(--ink);
+      transition: border-color 0.2s, background 0.2s, color 0.2s, transform 0.15s;
+      cursor: default;
+    }
+    .tag:hover {
+      border-color: var(--accent);
+      background: var(--accent);
+      color: #fff;
+      transform: translateY(-2px);
+    }
+
+    /* ── CONTACT ── */
+    #contact { background: var(--ink); color: var(--bg); }
+
+    #contact .section-header { border-bottom-color: rgba(255,255,255,0.1); }
+    #contact .section-num { color: var(--accent-light); }
+    #contact h2 { color: var(--bg); }
+
+    .contact-layout {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 5rem;
+      align-items: start;
+    }
+
+    .contact-intro {
+      font-size: 1.1rem;
+      color: rgba(247,246,242,0.65);
+      line-height: 1.8;
+      margin-bottom: 2rem;
+    }
+
+    .contact-links { display: flex; flex-direction: column; gap: 1rem; }
+
+    .contact-link {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      text-decoration: none;
+      color: var(--bg);
+      font-size: 0.95rem;
+      padding: 0.9rem 1.2rem;
+      border: 1px solid rgba(255,255,255,0.1);
+      transition: border-color 0.2s, background 0.2s, transform 0.2s;
+    }
+    .contact-link:hover {
+      border-color: var(--accent-light);
+      background: rgba(183,228,199,0.07);
+      transform: translateX(5px);
+    }
+
+    .contact-link-label {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.65rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: rgba(247,246,242,0.4);
+    }
+
+    .contact-highlight {
+      padding: 2.5rem;
+      border: 1px solid rgba(255,255,255,0.08);
+      transition: border-color 0.3s;
+    }
+    .contact-highlight:hover { border-color: rgba(183,228,199,0.3); }
+
+    .contact-highlight p {
+      font-family: 'DM Serif Display', serif;
+      font-style: italic;
+      font-size: 1.35rem;
+      line-height: 1.5;
+      color: rgba(247,246,242,0.8);
+    }
+
+    .contact-highlight .ch-label {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.65rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--accent-light);
+      margin-top: 1.5rem;
+      display: block;
+      font-style: normal;
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--ink);
+      border-top: 1px solid rgba(255,255,255,0.06);
+      padding: 1.5rem 4rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    footer span {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.65rem;
+      letter-spacing: 0.1em;
+      color: rgba(247,246,242,0.3);
+    }
+
+    /* ── SHARED KEYFRAMES ── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 900px) {
+      nav { padding: 1rem 2rem; }
+      #hero { grid-template-columns: 1fr; padding: 7rem 2rem 3rem; }
+      .hero-visual { display: none; }
+      section { padding: 5rem 2rem; }
+      .about-grid, .contact-layout { grid-template-columns: 1fr; gap: 3rem; }
+      .timeline-item { grid-template-columns: 1fr; gap: 0.5rem; }
+      .timeline-item::before { display: none; }
+      footer { flex-direction: column; gap: 0.5rem; padding: 1.5rem 2rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav id="navbar">
+    <a href="#hero" class="nav-logo"><img src="/Users/rohansarkar/Library/Mobile Documents/com~apple~CloudDocs/Website/Images/pngtree-dna-helix-icon-in-cartoon-style-vector-png-image_18575114.webp" alt=""style="float:left;width:75px;height:75px;"></a>
+    <ul class="nav-links">
+      <li><a href="#about">About</a></li>
+      <li><a href="#research">Research</a></li>
+      <li><a href="#projects">Projects</a></li>
+      <li><a href="#coursework">Coursework</a></li>
+      <li><a href="#skills">Skills</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </nav>
+
+  <!-- HERO -->
+  <section id="hero">
+    <div class="hero-text">
+      <div class="hero-tag">Biomedical Engineering · Boston University</div>
+      <h1><em>Rohan<br><em>Sarkar</em></h1>
+      <p class="hero-sub">
+        Engineering at the nanoscale — designing smart drug delivery systems, building AI tools for clinical data, and bridging biology with computation.
+      </p>
+      <a href="#about" class="hero-cta">Explore my work ↓</a>
+    </div>
+    <div class="hero-visual">
+      <div class="stat-card">
+        <div class="stat-num">3.94</div>
+        <div class="stat-label">GPA · Kilachand Honors College</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num">92%</div>
+        <div class="stat-label">Antibody Attachment Efficacy</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num">3+</div>
+        <div class="stat-label">Research & Engineering Labs</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section id="about">
+    <div class="section-header reveal">
+      <span class="section-num">01</span>
+      <h2>About Me</h2>
+    </div>
+    <div class="about-grid">
+      <div class="about-body reveal from-left">
+        <p>I'm an undergraduate at Boston University studying Biomedical Engineering with a minor in Chemistry and a concentration in Nanotechnology, enrolled in the Kilachand Honors College.</p>
+        <p>My research focuses on nanotechnology — specifically analyzing antibody attachment orientation on metal-organic framework nanoparticles to understand how orientation impacts cellular uptake. I am passionate about leveraging nanoscale engineering to advance drug delivery and other biomedical applications.</p>
+        <p>Alongside the lab, I'm an Engineering Intern at CareAI in Sydney, developing AI-powered document classification systems for clinical data. I'm eager to bring my interdisciplinary skill set to innovative projects at the intersection of biomedical engineering and technology.</p>
+      </div>
+      <div class="about-details stagger">
+        <div class="detail-row">
+          <span class="detail-label">Institution</span>
+          <span class="detail-value">Boston University</span>
+        </div>
+        <div class="detail-row">
+          <span class="detail-label">Degree</span>
+          <span class="detail-value">B.S. Biomedical Engineering — Expected May 2028</span>
+        </div>
+        <div class="detail-row">
+          <span class="detail-label">Concentration</span>
+          <span class="detail-value">Nanotechnology</span>
+        </div>
+        <div class="detail-row">
+          <span class="detail-label">Minor</span>
+          <span class="detail-value">Chemistry</span>
+        </div>
+        <div class="detail-row">
+          <span class="detail-label">Current Role</span>
+          <span class="detail-value">Engineering Intern, CareAI · Sydney, AU</span>
+        </div>
+        <div class="detail-row">
+          <span class="detail-label">Email</span>
+          <span class="detail-value"><a href="mailto:rsarka2@gmail.com" style="color:var(--accent);text-decoration:none;">rsarka2@gmail.com</a></span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- RESEARCH & EXPERIENCE -->
+  <section id="research">
+    <div class="section-header reveal">
+      <span class="section-num">02</span>
+      <h2>Research & Experience</h2>
+    </div>
+    <div class="timeline">
+
+      <div class="timeline-item">
+        <div class="timeline-meta">
+          <div class="timeline-date">Apr 2025 – Present</div>
+          <div class="timeline-place">BU Teplensky Lab</div>
+        </div>
+        <div class="timeline-content">
+          <h3>Researcher — Nanomedicine</h3>
+          <ul>
+            <li>Designed antibody-functionalized NU-1000 metal-organic frameworks for selective cancer drug delivery, targeting an 8% reduction in off-target toxicity.</li>
+            <li>Encapsulated doxorubicin and verified antibody attachment with 92% efficacy.</li>
+            <li>Evaluated cancer cell targeting via flow cytometry and confocal microscopy, achieving a 17% increase in cell-specific delivery.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="timeline-item">
+        <div class="timeline-meta">
+          <div class="timeline-date">Jan 2026 – Present</div>
+          <div class="timeline-place">CareAI · Sydney, AU</div>
+        </div>
+        <div class="timeline-content">
+          <h3>Engineering Intern</h3>
+          <ul>
+            <li>Developing an automated document classification & extraction system using AI, improving autonomous accuracy from 76% to 90%.</li>
+            <li>Optimizing a multi-model inference framework generating structured evidence and decision logic for clinical data.</li>
+            <li>Designing an iterative reinforcement learning platform to convert manual corrections into high-quality training data.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="timeline-item">
+        <div class="timeline-meta">
+          <div class="timeline-date">May–Aug 2024</div>
+          <div class="timeline-place">Office of Naval Research · NIWC Atlantic</div>
+        </div>
+        <div class="timeline-content">
+          <h3>Engineering Intern</h3>
+          <ul>
+            <li>Built a VR flight simulator in Unity (C#) on the Sony Spatial Reality Display to engage children in government STEM careers.</li>
+            <li>Presented project outcomes to the Executive Director and Commanding Officer at Charleston Naval Base.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="timeline-item">
+        <div class="timeline-meta">
+          <div class="timeline-date">Jun–Jul 2023</div>
+          <div class="timeline-place">Clemson University · Mechanical Engineering</div>
+        </div>
+        <div class="timeline-content">
+          <h3>Researcher — Computational Polymer Science</h3>
+          <ul>
+            <li>Modeled PNIPAM polymer behavior using dissipative particle dynamics on Clemson's supercomputer.</li>
+            <li>Ran large-scale simulations revealing how temperature and concentration influence thermoresponsive polymer dynamics.</li>
+          </ul>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- PROJECTS -->
+  <section id="projects">
+    <div class="section-header reveal">
+      <span class="section-num">03</span>
+      <h2>Projects</h2>
+    </div>
+    <div class="projects-grid stagger">
+      <div class="project-card">
+        <div class="project-tag">Biomedical Engineering · Ongoing</div>
+        <h3>Bionic Hand Model</h3>
+        <p>Developing a 3D-printed bionic hand prototype with realistic motion through iterative CAD modeling and mechanical testing. Designed in SolidWorks and Fusion 360.</p>
+      </div>
+      <div class="project-card">
+        <div class="project-tag">Embedded Systems · 2024</div>
+        <h3>Biometrically Actuated Door Lock</h3>
+        <p>Microcontroller-driven door lock with fingerprint recognition to improve accessibility for elderly and disabled users — eliminating the need for manual turning movements or physical keys.</p>
+      </div>
+      <div class="project-card">
+        <div class="project-tag">VR / Game Dev · 2024</div>
+        <h3>VR Flight Simulator</h3>
+        <p>Built for the Office of Naval Research using Unity and C# on the Sony Spatial Reality Display, designed to introduce children to STEM and government careers in an immersive format.</p>
+      </div>
+      <div class="project-card">
+        <div class="project-tag">AI / Clinical · 2026</div>
+        <h3>Clinical AI Document Classifier</h3>
+        <p>AI-powered document classification and extraction system for clinical data pipelines, incorporating reinforcement learning from human feedback to continuously improve accuracy.</p>
+      </div>
+    </div>
+  </section>
+
+      <!-- COURSEWORK -->
+  <section id="coursework">
+    <div class="section-header reveal">
+      <span class="section-num">04</span>
+      <h2>Coursework</h2>
+    </div>
+    <div class="timeline">
+
+      <div class="timeline-item">
+        <div class="timeline-content">
+          <h3>[Engineering Design]</h3>
+          <p>[...]</p>
+        </div>
+      </div>
+
+      <div class="timeline-item">
+        <div class="timeline-content">
+          <h3>[Probablility, Statistics, and Machine Learning]</h3>
+          <p>[...]</p>
+        </div>
+      </div>
+
+      <div class="timeline-item">
+        <div class="timeline-content">
+          <h3>[Computational Linear Algebra]</h3>
+          <p>[...]</p>
+        </div>
+      </div>
+
+      <div class="timeline-item">
+        <div class="timeline-content">
+          <h3>[Engineering Mechanics]</h3>
+          <p>[...]</p>
+        </div>
+      </div>
+
+      <div class="timeline-item">
+        <div class="timeline-content">
+          <h3>[Organic Chemistry]</h3>
+          <p>[...]</p>
+        </div>
+      </div>
+
+      <div class="timeline-item">
+        <div class="timeline-content">
+          <h3>[Microbiology]</h3>
+          <p>[...]</p>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- SKILLS -->
+  <section id="skills">
+    <div class="section-header reveal">
+      <span class="section-num">05</span>
+      <h2>Skills</h2>
+    </div>
+    <div class="skills-grid stagger">
+      <div class="skill-group">
+        <h3>Wet Lab</h3>
+        <div class="skill-tags">
+          <span class="tag">Cell Culture</span><span class="tag">Confocal Microscopy</span>
+          <span class="tag">Flow Cytometry</span><span class="tag">ESI-MS</span>
+          <span class="tag">DNA Synthesis</span><span class="tag">BCA Assay</span>
+        </div>
+      </div>
+      <div class="skill-group">
+        <h3>Programming</h3>
+        <div class="skill-tags">
+          <span class="tag">Python</span><span class="tag">MATLAB</span>
+          <span class="tag">C / C++</span><span class="tag">C#</span>
+          <span class="tag">Java</span><span class="tag">SQL</span>
+        </div>
+      </div>
+      <div class="skill-group">
+        <h3>CAD & Design</h3>
+        <div class="skill-tags">
+          <span class="tag">SolidWorks</span><span class="tag">Fusion 360</span>
+          <span class="tag">OnShape</span><span class="tag">Cura</span>
+        </div>
+      </div>
+      <div class="skill-group">
+        <h3>Technical & AI</h3>
+        <div class="skill-tags">
+          <span class="tag">LLM</span><span class="tag">NLP</span>
+          <span class="tag">LAMMPS</span><span class="tag">Unity</span>
+          <span class="tag">Microsoft 365</span>
+        </div>
+      </div>
+      <div class="skill-group">
+        <h3>Languages</h3>
+        <div class="skill-tags">
+          <span class="tag">English</span><span class="tag">Spanish</span><span class="tag">Bengali</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section id="contact">
+    <div class="section-header reveal">
+      <span class="section-num">06</span>
+      <h2>Contact</h2>
+    </div>
+    <div class="contact-layout">
+      <div class="reveal from-left">
+        <p class="contact-intro">Interested in collaborating on research, engineering projects, or internship opportunities? I'd love to connect.</p>
+        <div class="contact-links">
+          <a href="mailto:rsarka2@gmail.com" class="contact-link">
+            <div><div class="contact-link-label">Email</div><div>rsarka2@gmail.com</div></div>
+          </a>
+          <a href="https://www.linkedin.com/in/rohan-sarkar2" target="_blank" class="contact-link">
+            <div><div class="contact-link-label">LinkedIn</div><div>linkedin.com/in/rohan-sarkar2</div></div>
+          </a>
+          <a href="https://github.com/rsarka2" target="_blank" class="contact-link">
+            <div><div class="contact-link-label">GitHub</div><div>github.com/rsarka2</div></div>
+          </a>
+        </div>
+      </div>
+      <div class="contact-highlight reveal from-right">
+        <p>"Passionate about leveraging nanoscale engineering to advance drug delivery and other biomedical applications."</p>
+        <span class="ch-label">Rohan Sarkar · Boston University '28</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <span>© 2026 Rohan Sarkar</span>
+    <span>Boston University · Biomedical Engineering</span>
+  </footer>
+
+  <script>
+    // Nav shadow on scroll
+    const navbar = document.getElementById('navbar');
+    window.addEventListener('scroll', () => {
+      navbar.classList.toggle('scrolled', window.scrollY > 20);
+    });
+
+    // Scroll reveal observer
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.1 });
+
+    document.querySelectorAll('.reveal, .stagger, .timeline-item').forEach(el => observer.observe(el));
+  </script>
+
+</body>
+</html>
