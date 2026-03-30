@@ -82,7 +82,7 @@
 
     .nav-links {
       display: flex;
-      gap: 2.5rem;
+      gap: 2rem;
       list-style: none;
     }
 
@@ -103,7 +103,7 @@
 
     .nav-links a {
       font-family: 'DM Mono', monospace;
-      font-size: 1rem;
+      font-size: 0.80rem;
       letter-spacing: 0.12em;
       text-transform: uppercase;
       color: var(--muted);
@@ -522,7 +522,7 @@
 
     .projects-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
       gap: 1.5px;
       background: var(--line);
       border: 1px solid var(--line);
@@ -560,30 +560,26 @@
     .project-card p { font-size: 0.88rem; color: var(--muted); line-height: 1.7; }
 
     /* ── COURSEWORK ── */
-    #coursework { background: var(--bg); }
+    #coursework { background: var(--card); }
 
-    .coursework-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 2rem;
+    .coursework-list {
+      display: flex;
+      flex-direction: column;
     }
 
-    .coursework-item h3 {
-      font-family: 'DM Serif Display', serif;
-      font-size: 1.25rem;
-      margin-bottom: 0.75rem;
+    .coursework-item {
+      padding: 2.5rem 0;
+      border-bottom: 1px solid var(--line);
+      position: relative;
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 0.65s cubic-bezier(0.22,1,0.36,1),
+                  transform 0.65s cubic-bezier(0.22,1,0.36,1);
     }
 
-    .coursework-item p {
-      font-size: 0.92rem;
-      color: #555550;
-      line-height: 1.75;
-    }
+    .coursework-item.visible { opacity: 1; transform: translateY(0); }
 
-    .timeline-item.visible { opacity: 1; transform: translateY(0); }
-
-    /* green left bar grows in on reveal */
-    .timeline-item::before {
+    .coursework-item::before {
       content: '';
       position: absolute;
       left: -1.5rem;
@@ -594,53 +590,19 @@
       transform-origin: top;
       transition: transform 0.6s 0.3s cubic-bezier(0.22,1,0.36,1);
     }
-    .timeline-item.visible::before { transform: scaleY(1); }
 
-    .timeline-meta { padding-top: 0.2rem; }
+    .coursework-item.visible::before { transform: scaleY(1); }
 
-    .timeline-date {
-      font-family: 'DM Mono', monospace;
-      font-size: 0.68rem;
-      letter-spacing: 0.1em;
-      color: var(--muted);
-      text-transform: uppercase;
-    }
-
-    .timeline-place {
-      font-size: 0.85rem;
-      color: var(--accent);
-      margin-top: 0.3rem;
-      font-weight: 500;
-    }
-
-    .timeline-content h3 {
+    .coursework-item h3 {
       font-family: 'DM Serif Display', serif;
       font-size: 1.25rem;
       margin-bottom: 0.75rem;
     }
 
-    .timeline-content ul {
-      list-style: none;
-      display: flex;
-      flex-direction: column;
-      gap: 0.5rem;
-      margin-top: 0.75rem;
-    }
-
-    .timeline-content ul li {
+    .coursework-item p {
       font-size: 0.9rem;
       color: #555550;
-      padding-left: 1.2rem;
-      position: relative;
-      line-height: 1.65;
-    }
-
-    .timeline-content ul li::before {
-      content: '→';
-      position: absolute;
-      left: 0;
-      color: var(--accent);
-      font-size: 0.8rem;
+      line-height: 1.75;
     }
 
     /* ── SKILLS ── */
@@ -898,11 +860,7 @@
         </div>
         <div class="timeline-content">
           <h3>Engineering Intern</h3>
-          <ul>
-            <li>Developing an automated document classification & extraction system using AI, improving autonomous accuracy from 76% to 90%.</li>
-            <li>Optimizing a multi-model inference framework generating structured evidence and decision logic for clinical data.</li>
-            <li>Designing an iterative reinforcement learning platform to convert manual corrections into high-quality training data.</li>
-          </ul>
+            <p>As a Software Engineering Intern at CareAI in Sydney, Australia, I am developing AI-powered tools to streamline clinical data processing. My work spans automated document classification, multi-model inference frameworks, and reinforcement learning systems that continuously improve from human feedback, all aimed at making clinical workflows faster, more accurate, and more reliable.</p>
         </div>
       </div>
 
@@ -912,12 +870,8 @@
           <div class="timeline-place">BU Teplensky Lab</div>
         </div>
         <div class="timeline-content">
-          <h3>Researcher — Nanomedicine</h3>
-          <ul>
-            <li>Designed antibody-functionalized NU-1000 metal-organic frameworks for selective cancer drug delivery, targeting an 8% reduction in off-target toxicity.</li>
-            <li>Encapsulated doxorubicin and verified antibody attachment with 92% efficacy.</li>
-            <li>Evaluated cancer cell targeting via flow cytometry and confocal microscopy, achieving a 17% increase in cell-specific delivery.</li>
-          </ul>
+          <h3>Nanomedicine Researcher</h3>
+            <p>As a researcher in the Teplensky Lab at Boston University, I am engineering antibody-functionalized metal-organic framework nanoparticles to improve targeted drug delivery to cancer cells. My work involves encapsulating chemotherapy agents, verifying antibody attachment, and evaluating cellular uptake through flow cytometry and confocal microscopy, with the goal of reducing off-target toxicity and improving treatment precision.</p>
         </div>
       </div>
 
@@ -928,10 +882,7 @@
         </div>
         <div class="timeline-content">
           <h3>Engineering Intern</h3>
-          <ul>
-            <li>Built a VR flight simulator in Unity (C#) on the Sony Spatial Reality Display to engage children in government STEM careers.</li>
-            <li>Presented project outcomes to the Executive Director and Commanding Officer at Charleston Naval Base.</li>
-          </ul>
+            <p>As an Engineering Intern at the Office of Naval Research's Naval Information Warfare Center Atlantic, I developed a virtual reality flight simulator using Unity and C# on the Sony Spatial Reality Display, designed to introduce children to STEM fields and government careers. I presented the final project and demo directly to the Executive Director and Commanding Officer at Charleston Naval Base, demonstrating the simulator's educational impact and key functionalities.</p>
         </div>
       </div>
 
@@ -941,11 +892,30 @@
           <div class="timeline-place">Clemson University · Mechanical Engineering</div>
         </div>
         <div class="timeline-content">
-          <h3>Researcher — Computational Polymer Science</h3>
-          <ul>
-            <li>Modeled PNIPAM polymer behavior using dissipative particle dynamics on Clemson's supercomputer.</li>
-            <li>Ran large-scale simulations revealing how temperature and concentration influence thermoresponsive polymer dynamics.</li>
-          </ul>
+          <h3>Computational Polymer Science Researcher</h3>
+            <p>As a researcher in the Mechanical Engineering Department at Clemson University, I modeled the behavior of thermoresponsive polymers using dissipative particle dynamics simulations on Clemson's supercomputer. By varying temperature and concentration parameters across large-scale simulations, I uncovered key insights into how environmental conditions influence polymer dynamics, contributing to a broader understanding of smart material behavior.</p>
+        </div>
+      </div>
+
+      <div class="timeline-item">
+        <div class="timeline-meta">
+          <div class="timeline-date">Aug 2023-Jan 2024</div>
+          <div class="timeline-place">SCGSSM · Chemistry</div>
+        </div>
+        <div class="timeline-content">
+          <h3>Chemical Characterization Researcher</h3>
+            <p>As a Research Collaborator under Dr. Gordon Brown at the South Carolina Governor's School for Science and Mathematics, I made a first-in-history measurement of the molecular structure of 2,3,6-trifluorophenol using microwave spectroscopy, contributing original data to the field of structural chemistry. I went on to present this work at two prestigious scientific conferences, earning third place in the Biochemistry and Chemistry Division at the South Carolina Junior Academy of Science.</p>
+        </div>
+      </div>
+
+      <div class="timeline-item">
+        <div class="timeline-meta">
+          <div class="timeline-date">Jun-Jul 2024</div>
+          <div class="timeline-place">Office of Naval Research · NIWC Atlantic</div>
+        </div>
+        <div class="timeline-content">
+          <h3>Engineering Intern</h3>
+            <p>Working alongside Navy engineers on active defense systems at NIWC Atlantic, I gained hands-on experience in military telecommunications through the Science and Engineering Apprenticeship Program. I helped design and operate ad hoc communication networks linking a land-based station to an offshore vessel, stress-testing the reliability of omnidirectional antennas under real operational conditions</p>
         </div>
       </div>
 
@@ -958,27 +928,45 @@
       <span class="section-num">03</span>
       <h2>Projects</h2>
     </div>
+    
     <div class="projects-grid stagger">
+
       <div class="project-card">
         <div class="project-tag">Medical Devices · Ongoing</div>
-        <h3>Bionic Hand Model</h3>
-        <p>Developing a 3D-printed bionic hand prototype with realistic motion through iterative CAD modeling and mechanical testing. Designed in SolidWorks and Fusion 360.</p>
+        <h3>Bionic Hand Prototype</h3>
+        <p>Designing and 3D-printing a functional bionic hand prototype with articulated fingers and realistic motion. Iteratively modeling mechanical components in CAD for optimal movement and durability, while conducting mechanical testing to refine joint mechanisms, grip strength, and motion accuracy.</p>
       </div>
+
       <div class="project-card">
-        <div class="project-tag">Assistive Technology · 2024</div>
+        <div class="project-tag">Assistive Technology · 2025</div>
         <h3>Biometrically Actuated Door Lock</h3>
-        <p>Microcontroller-driven door lock with fingerprint recognition to improve accessibility for elderly and disabled users — eliminating the need for manual turning movements or physical keys.</p>
+        <p>Designed and built a fingerprint-actuated door lock to improve accessibility, privacy, and security for elderly and disabled users. Integrated biometric sensors with a microcontroller-based control system, developing embedded software for reliable user authentication and consistent locking performance.</p>
       </div>
+
       <div class="project-card">
-        <div class="project-tag">Structural Engineering · 2024</div>
-        <h3>Truss Testing & Optimization</h3>
-        <p></p>
+        <div class="project-tag">Structural Engineering · 2025</div>
+        <h3>Truss Structural Analysis & Optimization</h3>
+        <p>Designed, simulated, and optimized multiple truss configurations in MATLAB to maximize strength-to-weight performance, backed by hand calculations for internal forces and member stresses. Fabricated a physical truss using acrylic members and precision assembly, achieving the highest load capacity in the class under live load testing.</p>
       </div>
+
       <div class="project-card">
         <div class="project-tag">Biosignal Analysis · 2024</div>
-        <h3>ECG Signal Processing</h3>
-        <p></p>
+        <h3>ECG Signal Processing & HRV Analysis</h3>
+        <p>Analyzed three-lead ECG data across resting, post-exercise, and box-breathing conditions to study heart rate variability. Used MATLAB to extract cardiac cycle features including the P wave, QRS complex, and T wave, developing custom signal processing algorithms and visualizations to quantify and interpret physiological changes.</p>
       </div>
+
+      <div class="project-card">
+        <div class="project-tag">Embedded Systems · 2024</div>
+        <h3>Temperature Sensing Device</h3>
+        <p>Designed and built a fully functional temperature sensing device integrating an Arduino microcontroller, electronic sensors, and a real-time display. Programmed custom firmware in C++ to process sensor data, and fabricated a custom enclosure using 3D printing and cutting tools for a clean, user-ready final product.</p>
+      </div>
+
+      <div class="project-card">
+        <div class="project-tag">Microbiology · 2024</div>
+        <h3>Plastic-Degrading Bacteria Isolation</h3>
+        <p>Collected environmental soil samples from a recycling center and applied selective enrichment techniques to isolate bacteria capable of metabolizing plastic. Successfully identified two plastic-degrading bacterial species, characterizing their morphology through microscopy and aseptic culturing methods.</p>
+      </div>
+
     </div>
   </section>
 
@@ -988,50 +976,36 @@
       <span class="section-num">04</span>
       <h2>Coursework</h2>
     </div>
-    <div class="timeline">
-
-      <div class="timeline-item">
-        <div class="timeline-content">
-          <h3>[Engineering Design]</h3>
-          <p>[...]</p>
-        </div>
+    <div class="coursework-list">
+      <div class="coursework-item">
+        <h3>Engineering Design</h3>
+        <p>Completed BU's core engineering design course, working through the full product development cycle from problem definition and conceptual design through prototyping and deployment. Worked in a team with time and budget constraints to emulate the process of working with a real client, applying design principles across CAD modeling, circuit prototyping, and iterative testing. Culminated in the design and build of a biometrically actuated door lock, a microcontroller-driven fingerprint recognition system improving accessibility for elderly and disabled users.</p>
       </div>
 
-      <div class="timeline-item">
-        <div class="timeline-content">
-          <h3>[Probablility, Statistics, and Machine Learning]</h3>
-          <p>[...]</p>
-        </div>
+      <div class="coursework-item">
+        <h3>Probability, Statistics, and Machine Learning</h3>
+        <p>Completed BU's rigorous engineering probability and statistics course, developing a strong foundation in statistical inference, data analysis, and machine learning. Applied advanced concepts including PCA, probabilistic classification, and Markov chains to real-world engineering datasets in MATLAB, culminating in a machine learning image classifier project, bridging theoretical statistics with hands-on data science.</p>
       </div>
 
-      <div class="timeline-item">
-        <div class="timeline-content">
-          <h3>[Computational Linear Algebra]</h3>
-          <p>[...]</p>
-        </div>
+      <div class="coursework-item">
+        <h3>Computational Linear Algebra</h3>
+        <p>Completed BU's core computational linear algebra course, developing fluency in vectors and matrices, linear systems of equations, vector spaces, eigenvectors and eigenvalues, and singular values. Applied these concepts computationally using MATLAB to solve real-world engineering problems, including data modeling, least-squares fitting, and dimensionality reduction. Gained a strong mathematical foundation that directly supports work in machine learning, data science, and engineering analysis.</p>
       </div>
 
-      <div class="timeline-item">
-        <div class="timeline-content">
-          <h3>[Engineering Mechanics]</h3>
-          <p>[...]</p>
-        </div>
+      <div class="coursework-item">
+        <h3>Engineering Mechanics</h3>
+        <p>Completed BU's core engineering mechanics course, developing proficiency in the analysis of static mechanical systems including particle and rigid body equilibrium, truss and frame analysis, friction, and distributed forces. Applied vector analysis and free body diagram techniques to progressively complex structural problems. Culminated in a hands-on truss design project, experimentally determining material properties, optimizing a load-bearing structure, and predicting failure load through analytical modeling and physical testing.</p>
       </div>
 
-      <div class="timeline-item">
-        <div class="timeline-content">
-          <h3>[Organic Chemistry]</h3>
-          <p>[...]</p>
-        </div>
+      <div class="coursework-item">
+        <h3>Organic Chemistry</h3>
+        <p>Completed BU's organic chemistry sequence, building a comprehensive understanding of the structure, bonding, and reactivity of organic molecules. Covered core topics including stereochemistry, substitution and elimination reactions, alkyl halides, alcohols, and fundamental reaction mechanisms. Applied spectroscopic analysis and synthetic reasoning in both lecture and laboratory settings, gaining hands-on experience in extraction, distillation, chromatography, and spectroscopic interpretation.</p>
       </div>
 
-      <div class="timeline-item">
-        <div class="timeline-content">
-          <h3>[Microbiology]</h3>
-          <p>[...]</p>
-        </div>
+      <div class="coursework-item">
+        <h3>Microbiology</h3>
+        <p>Completed a microbiology course covering core concepts in cell biology, microbial genetics, and the mechanisms of bacterial growth and reproduction. Culminated in a hands-on research experiment isolating and culturing bacteria capable of degrading plastic, designing experimental protocols, preparing growth media, and analyzing results to identify potential plastic-degrading candidates.</p>
       </div>
-
     </div>
   </section>
 
@@ -1133,8 +1107,7 @@
       });
     }, { threshold: 0.1 });
 
-    document.querySelectorAll('.reveal, .stagger, .timeline-item').forEach(el => observer.observe(el));
-  </script>
+    document.querySelectorAll('.reveal, .stagger, .timeline-item, .coursework-item').forEach(el => observer.observe(el));  </script>
 
 </body>
 </html>
