@@ -133,3 +133,22 @@
     });
   }
 })();
+
+/* Featured project: crossfading image slideshow (pauses on hover; off for reduced motion) */
+document.querySelectorAll('[data-slideshow]').forEach(function (show) {
+  var imgs = show.querySelectorAll('img');
+  if (imgs.length < 2 || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  var i = 0, timer = null;
+  show.classList.add('is-running');
+  imgs[0].classList.add('active');
+  function next() { imgs[i].classList.remove('active'); i = (i + 1) % imgs.length; imgs[i].classList.add('active'); }
+  function stop() { clearInterval(timer); timer = null; }
+  function start() { stop(); timer = setInterval(next, 4000); }
+  var card = show.closest('.entry') || show;
+  card.addEventListener('mouseenter', stop);
+  card.addEventListener('mouseleave', start);
+  card.addEventListener('focusin', stop);
+  card.addEventListener('focusout', start);
+  document.addEventListener('visibilitychange', function () { document.hidden ? stop() : start(); });
+  start();
+});
