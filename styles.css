@@ -550,3 +550,34 @@ a { color: inherit; }
   *, *::before, *::after { animation: none !important; transition: none !important; }
   .nav-list li, .hero-photo, .hero-text, .js .reveal { opacity: 1; transform: none; }
 }
+
+/* ── Homepage revisions ──────────────────────────────────────────────── */
+/* Experience: two cards side by side */
+.xp-pair { align-items: stretch; }
+.xp-pair .xp { display: flex; flex-direction: column; gap: 10px; }
+.xp-pair .xp-meta { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; flex-wrap: wrap; }
+.xp-pair .xp-meta .place { margin-top: 0; }
+.xp-pair .xp-tags { margin-top: auto; padding-top: 16px; border-top: 1px dashed var(--line); }
+
+/* Awards: links under each card */
+.award { display: flex; flex-direction: column; }
+.award-links { display: flex; flex-wrap: wrap; gap: 8px 18px; margin-top: auto; padding-top: 14px; }
+.award-links a { font: 500 0.76rem/1.4 var(--font-mono); color: var(--accent); text-decoration: none; }
+.award-links a:not([target])::after { content: " →"; }
+.award-links a:hover { text-decoration: underline; text-underline-offset: 4px; }
+
+/* Skills: three columns, stacked groups in columns 2 and 3 */
+.skills-cols { align-items: start; }
+.skill-col { display: flex; flex-direction: column; gap: 14px; }
+
+@media (max-width: 960px) {
+  .skills-cols > :last-child { grid-column: span 2; flex-direction: row; }
+  .skills-cols > :last-child > * { flex: 1; }
+}
+@media (max-width: 760px) {
+  .skills-cols > :last-child { grid-column: auto; flex-direction: column; }
+  .edu .facts { grid-template-columns: 1fr; gap: 0; }
+  .edu .facts dd { margin-bottom: 10px; }
+}
+
+.award p.lbl { font-size: 0.7rem; color: var(--accent); }
