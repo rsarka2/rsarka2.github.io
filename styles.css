@@ -590,3 +590,6 @@ a { color: inherit; }
 .slideshow img:not(:first-child) { opacity: 0; }
 .slideshow.is-running img { opacity: 0; }
 .slideshow.is-running img.active { opacity: 1; }
+
+/* Detail-page gallery photos */
+.gallery-img { width: 100%; aspect-ratio: 4 / 3; object-fit: cover; border-radius: 8px; border: 1px solid var(--line); background: var(--accent-tint); }
