@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Drone Search Assist Payload · Afterglow · Rohan Sarkar</title>
+  <meta name="description" content="A drone payload that finds lost phones, even switched-off or dead ones, through their Bluetooth beacons and alerts park rangers over LoRa. Built in 26 hours at the CodeMetalForge Hackathon.">
+  <link rel="icon" type="image/png" href="../assets/dna.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&family=Space+Grotesk:wght@500;600&display=swap">
+  <link rel="stylesheet" href="../styles.css">
+  <script>document.documentElement.classList.add('js');</script>
+  <script src="../main.js" defer></script>
+</head>
+<body>
+  <a class="skip" href="#main">Skip to content</a>
+
+  <header class="site-header">
+    <div class="wrap nav-bar">
+      <a class="brand" href="../index.html"><img src="../assets/dna.png" alt="" width="46" height="46">Rohan Sarkar</a>
+      <button class="menu-btn" type="button" aria-expanded="false" aria-controls="nav-list" aria-label="Open menu"><span></span><span></span><span></span></button>
+      <nav aria-label="Primary">
+        <ul class="nav-list" id="nav-list">
+        <li><a href="../index.html#about"><span>01</span>About</a></li>
+        <li><a href="../index.html#research"><span>02</span>Research</a></li>
+        <li><a href="../index.html#experience"><span>03</span>Experience</a></li>
+        <li><a href="../index.html#projects"><span>04</span>Projects</a></li>
+        <li><a href="../index.html#awards"><span>05</span>Awards</a></li>
+        <li><a href="../index.html#skills"><span>06</span>Skills</a></li>
+        <li><a href="../index.html#contact"><span>07</span>Contact</a></li>
+        <li><a class="btn btn-sm" href="../assets/resume.pdf" target="_blank" rel="noopener">Resume</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main" class="wrap">
+    <div class="detail-head">
+      <nav class="crumbs" aria-label="Breadcrumb">
+        <a class="back-link" href="../index.html#projects">← Back to all projects</a>
+        <span class="lbl">P-01 · Project</span>
+      </nav>
+      <h1>Drone Search Assist Payload · Afterglow</h1>
+      <p class="tagline">A drone payload that finds lost phones, even switched-off or dead ones, so park rangers can find the people who carried them.</p>
+      <ul class="meta-row"><li class="chip">CodeMetalForge Hackathon</li><li class="chip">November 2026</li><li class="chip">Built in 26 hours</li><li class="chip">Team of 4</li></ul>
+    </div>
+    <div class="detail-media reveal"><img class="hero-shot" src="../assets/afterglow-pod.jpg" data-zoom="../assets/afterglow-pod.jpg" alt="The assembled Afterglow sensing pod: a taped black enclosure with the thermal camera mounted on the front"></div>
+    <div class="detail-layout">
+      <div class="detail-body">
+        <section class="cell block reveal" aria-labelledby="s1">
+          <p class="lbl">01</p>
+          <h2 id="s1">The Problem</h2>
+          <p>When someone goes missing in a park, rangers have to narrow a huge area down to one spot, fast. In an Oregon study of about 3,300 search subjects, search time was the only factor that predicted survival.</p>
+          <p>The lost person's phone is often the best clue. By the time a search starts, though, it is usually out of coverage, out of battery or switched off, and existing drone tools only find phones that are still on.</p>
+        </section>
+        <section class="cell block reveal" aria-labelledby="s2">
+          <p class="lbl">02</p>
+          <h2 id="s2">The Idea</h2>
+          <p>Modern phones keep calling for help after they go quiet. An iPhone 11 or newer keeps sending an Apple Find My Bluetooth beacon for up to 24 hours after it is switched off, and for about 5 hours after its battery dies. Android phones in Google Find Hub or Samsung lost mode do something similar, and so do AirTags.</p>
+          <p>Afterglow is a sensing pod that straps under a drone and listens for those beacons. It pins each one on the park map and sends the pin to the ranger over long-range LoRa radio, with no cell service or Wi-Fi needed. Live camera and thermal views then help the ranger confirm that there's a person at the pin. <strong>The drone never decides:</strong> the software proposes, and a ranger approves every pin and every flight leg.</p>
+          <figure class="diagram">
+            <img class="zoomable" src="../assets/afterglow-system.png" data-zoom="../assets/afterglow-system.png" alt="System overview: a lost phone's Bluetooth beacon is heard by the pod's ESP32 scanner, processed on a Raspberry Pi 5, and sent as a 16-byte LoRa alert to an SDR on the ranger's laptop, which shows it on the operator dashboard and on field teams' ATAK/iTAK phones" loading="lazy">
+            <figcaption>System overview: only the 16-byte LoRa alert has to leave the pod. Click to enlarge.</figcaption>
+          </figure>
+        </section>
+        <section class="cell block reveal" aria-labelledby="s3">
+          <p class="lbl">03</p>
+          <h2 id="s3">My Role</h2>
+          <p>I worked on the hardware side of the pod: wiring the Raspberry Pi 5, ESP32 boards, LoRa radio, GPS, IMU and cameras together, troubleshooting them during bring-up, and writing the code that talks to the hardware. I wrote the pod's hardware reference that the rest of the team built the software against, assembled the finished pod, and worked on our presentation.</p>
+        </section>
+        <section class="cell block reveal" aria-labelledby="s4">
+          <p class="lbl">04</p>
+          <h2 id="s4">How It Works</h2>
+          <ol class="steps">
+            <li><div><strong>Hears</strong><span>A passive ESP32 Bluetooth scanner picks out lost-device beacons (Apple Find My, Google Find Hub, Samsung lost mode). It reads only each beacon's type marker and signal strength, never its contents.</span></div></li>
+            <li><div><strong>Locates</strong><span>A tracker combines signal strength with the pod's own position to estimate where each beacon is, with a 95% confidence radius, and keeps following it even when the beacon's key rotates.</span></div></li>
+            <li><div><strong>Flags</strong><span>The ranger's rules decide which beacons become pins: off-trail beacons heard on repeat passes by day, anything outside the campgrounds at night, and every lost-device beacon during an active search.</span></div></li>
+            <li><div><strong>Sends</strong><span>Each pin leaves the pod as a 16-byte LoRa alert at 915 MHz. A software-defined radio on the ranger's laptop receives it, and the pin appears on the operator dashboard and on field teams' phones.</span></div></li>
+            <li><div><strong>Helps confirm</strong><span>The ranger checks each pin with a live camera view and real thermal temperatures. An SOS Wi-Fi page lets the lost person answer "hurt? can walk? how many?", and each answer lands on the pin.</span></div></li>
+          </ol>
+          <figure class="diagram">
+            <img class="zoomable" src="../assets/afterglow-hardware.png" data-zoom="../assets/afterglow-hardware.png" alt="Pod hardware diagram showing how the Raspberry Pi 5 connects to the ESP32 scanners, RFM95W LoRa radio, GPS, IMU, thermal camera, Pi camera and power bank" loading="lazy">
+            <figcaption>Pod hardware and how each part connects to the Pi. Click to enlarge.</figcaption>
+          </figure>
+        </section>
+        <section class="cell block reveal" aria-labelledby="s5">
+          <p class="lbl">05</p>
+          <h2 id="s5">Results</h2>
+          <div class="stat-row"><div class="stat"><b>26 h</b><small>from first parts to a working pod</small></div><div class="stat"><b>16 B</b><small>LoRa alert per pin; no addresses or IDs ever leave the pod</small></div><div class="stat"><b>379</b><small>automated tests passing across the codebase</small></div></div>
+          <ul class="arrow-list" style="margin-top:16px">
+            <li><strong>Bluetooth scanner, on hardware:</strong> in a crowded building it picked out about 1.5 Find My beacons per second from about 240 per second of other Apple traffic.</li>
+            <li><strong>LoRa link, on hardware:</strong> pins and heartbeats reached the laptop's SDR, and packets from 6 other teams were heard and filtered out.</li>
+            <li><strong>Thermal and live cameras, SOS page, Wi-Fi listener:</strong> all working on the pod, with all 9 pod services starting at boot.</li>
+            <li><strong>Simulated:</strong> tracking accuracy (worst error 1.5 m over 20 indoor runs) and a full park-scale mission on real Acadia National Park trails.</li>
+          </ul>
+          <p>The drones available at the hackathon were too small to carry the pod, so we built and tested the payload on its own.</p>
+        </section>
+        <section class="cell block reveal" aria-labelledby="s6">
+          <p class="lbl">06</p>
+          <h2 id="s6">What I'd Do Next</h2>
+          <ul class="arrow-list">
+            <li><strong>Fly it:</strong> strap the pod under a larger drone, then add an autopilot that flies the planner's legs, still with one ranger approval per leg.</li>
+            <li><strong>Measure with real beacons:</strong> run range tests and blind passes to tune the signal model.</li>
+            <li><strong>Person detection:</strong> use the Raspberry Pi AI HAT+ to point the ranger at likely people in the camera view.</li>
+          </ul>
+        </section>
+        <section class="cell block reveal" aria-labelledby="s7">
+          <p class="lbl">07</p>
+          <h2 id="s7">Gallery</h2>
+          <div class="gallery">
+            <img class="gallery-img" src="../assets/afterglow-pod.jpg" data-zoom="../assets/afterglow-pod.jpg" alt="The assembled pod" loading="lazy">
+            <img class="gallery-img" src="../assets/afterglow-wiring.jpg" data-zoom="../assets/afterglow-wiring.jpg" alt="Wiring the Raspberry Pi, GPS and sensors during the build" loading="lazy" style="object-position: center 60%">
+          </div>
+        </section>
+        <section class="cell block reveal" aria-labelledby="s8">
+          <p class="lbl">08</p>
+          <h2 id="s8">Links</h2>
+          <div class="links-row">
+            <a class="btn btn-outline" href="https://github.com/rsarka2/AFTERGLOW" target="_blank" rel="noopener">GitHub ↗</a>
+            <a class="btn btn-outline" href="https://github.com/rsarka2/AFTERGLOW/tree/main/docs/demo%20videos" target="_blank" rel="noopener">Demo videos ↗</a>
+          </div>
+        </section>
+      </div>
+      <aside class="cell key-facts" aria-labelledby="kf">
+        <h2 id="kf" class="lbl">Key Facts</h2>
+        <dl class="facts stacked">
+            <dt>Role</dt><dd>Hardware: wiring, troubleshooting, hardware code and assembly; presentation</dd>
+            <dt>Tools</dt><dd>Raspberry Pi 5, ESP32-S3, LoRa (RFM95W, ADALM-PLUTO SDR), GPS, IMU, thermal camera, Python, MQTT, Arduino</dd>
+            <dt>Event</dt><dd>CodeMetalForge Hackathon · 7–8 November 2026 · 26 hours</dd>
+            <dt>Team</dt><dd>Dillon Smith, Rohan Sarkar, Birinder Bachhal, Lucas Marotta</dd>
+            <dt>Outcome</dt><dd>Working payload: real lost-device beacons pinned and sent over LoRa to the ranger's laptop</dd>
+        </dl>
+      </aside>
+    </div>
+    <nav class="pager" aria-label="More projects">
+      <a href="../index.html#projects"><span class="lbl">← Back to all projects</span><span class="title">Projects overview</span></a>
+      <a class="next" href="heat-stroke-wearable.html"><span class="lbl">Next project →</span><span class="title">Predictive Heat Stroke Wearable · EMBR</span></a>
+    </nav>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap">
+      <span>© 2026 Rohan Sarkar</span>
+      <span>Boston University · Biomedical Engineering</span>
+    </div>
+  </footer>
+</body>
+</html>

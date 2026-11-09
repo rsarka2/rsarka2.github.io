@@ -297,10 +297,47 @@ a { color: inherit; }
 .more::after { content: " →"; display: inline-block; transition: transform 0.25s var(--ease); }
 .entry:hover .more::after { transform: translateX(4px); }
 
-.projects-grid { grid-auto-flow: dense; }
-.entry.featured { grid-column: span 2; grid-row: span 2; }
+/* Projects: 6-track grid. Two featured cards share row 1 (3 + 3), three cards fill row 2 (2 + 2 + 2),
+   and the two .wide cards fill row 3 (3 + 3). */
+.projects-grid { grid-template-columns: repeat(6, minmax(0, 1fr)); }
+.projects-grid > .entry { grid-column: span 2; }
+.projects-grid > .entry.featured, .projects-grid > .entry.wide { grid-column: span 3; }
 .entry.featured .ph { margin-bottom: 18px; }
-.entry.featured h3 { font-size: 1.6rem; }
+.entry.featured h3 { font-size: 1.45rem; }
+
+/* Cards that hold buttons are <div>s; one stretched link makes the whole card clickable */
+.entry.has-link { position: relative; }
+.card-link { color: inherit; text-decoration: none; }
+.card-link::after { content: ""; position: absolute; inset: 0; z-index: 1; border-radius: inherit; }
+.card-link:focus-visible { outline: none; }
+.entry.has-link:has(.card-link:focus-visible) { outline: 2px solid var(--accent); outline-offset: 3px; }
+
+/* Slideshow controls (built by main.js; hidden without JS) */
+.ss-btn, .ss-dots { position: absolute; z-index: 2; }
+.ss-btn {
+  top: 50%; transform: translateY(-50%);
+  display: grid; place-items: center;
+  width: 36px; height: 36px; border-radius: 50%;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  background: rgba(255, 255, 255, 0.88); color: #1a1a1a;
+  cursor: pointer; opacity: 0.85;
+  transition: opacity 0.2s, background 0.2s, transform 0.2s;
+}
+.ss-btn svg { width: 16px; height: 16px; }
+.ss-btn.prev { left: 10px; }
+.ss-btn.next { right: 10px; }
+.entry:hover .ss-btn, .ss-btn:focus-visible { opacity: 1; }
+.ss-btn:hover { background: #fff; transform: translateY(-50%) scale(1.06); }
+.ss-dots {
+  left: 50%; bottom: 10px; transform: translateX(-50%);
+  display: flex; gap: 6px; padding: 5px 8px; border-radius: 999px;
+  background: rgba(0, 0, 0, 0.35);
+}
+.ss-dot { width: 8px; height: 8px; padding: 0; border: 0; border-radius: 50%; background: rgba(255, 255, 255, 0.55); cursor: pointer; }
+.ss-dot[aria-current="true"] { background: #fff; }
+/* Bigger touch targets without bigger dots */
+.ss-dot { position: relative; }
+.ss-dot::before { content: ""; position: absolute; inset: -8px -4px; }
 
 .badge {
   display: inline-block; align-self: flex-start;
@@ -414,6 +451,10 @@ a { color: inherit; }
 .chip.award { background: var(--accent-2); border-color: var(--accent-2); color: var(--on-accent-2); }
 
 .detail-media { margin-bottom: 14px; }
+.hero-shot { display: block; width: 100%; aspect-ratio: 16 / 9; object-fit: cover; border-radius: var(--radius); border: 1px solid var(--line); background: var(--accent-tint); cursor: zoom-in; }
+.diagram { margin-top: 16px; }
+.diagram img { display: block; width: 100%; height: auto; background: #fff; }
+.diagram figcaption { margin-top: 8px; font: 400 0.72rem/1.4 var(--font-mono); color: var(--muted); }
 .video { position: relative; aspect-ratio: 16 / 9; border-radius: var(--radius); overflow: hidden; border: 1px solid var(--line); background: #111; }
 .video iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
 
@@ -524,7 +565,8 @@ a { color: inherit; }
 @media (max-width: 960px) {
   .grid-3 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .projects-grid > :last-child:nth-child(even) { grid-column: span 2; }
-  .entry.featured { grid-row: auto; }
+  .projects-grid > .entry, .projects-grid > .entry.featured, .projects-grid > .entry.wide { grid-column: auto; }
+  .projects-grid > .entry:last-child:nth-child(odd) { grid-column: span 2; }
   .about-grid, .contact-card { grid-template-columns: 1fr; }
   .detail-layout { grid-template-columns: 1fr; }
   .key-facts { position: static; order: -1; }
@@ -539,6 +581,7 @@ a { color: inherit; }
   .section { padding: 56px 0; }
   .grid-2, .grid-3 { grid-template-columns: 1fr; }
   .entry.featured, .projects-grid > :last-child:nth-child(even) { grid-column: auto; }
+  .projects-grid > .entry:last-child:nth-child(odd) { grid-column: auto; }
   .xp { grid-template-columns: 1fr; gap: 6px; }
   .cell { padding: 20px; }
   .pager { grid-template-columns: 1fr; }

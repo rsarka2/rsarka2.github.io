@@ -134,21 +134,76 @@
   }
 })();
 
-/* Featured project: crossfading image slideshow (pauses on hover; off for reduced motion) */
+/* Featured projects: crossfading image slideshows.
+   Autoplay pauses on hover/focus and is off for reduced motion; arrows, dots and swipe always work. */
 document.querySelectorAll('[data-slideshow]').forEach(function (show) {
   var imgs = show.querySelectorAll('img');
-  if (imgs.length < 2 || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-  var i = 0, timer = null;
+  var n = imgs.length;
+  if (n < 2) return;
+  var i = 0, timer = null, paused = false;
+  var autoplay = !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var chevron = function (d) {
+    return '<svg viewBox="0 0 16 16" aria-hidden="true"><path d="' + d + '" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+  };
+
   show.classList.add('is-running');
-  imgs[0].classList.add('active');
-  function next() { imgs[i].classList.remove('active'); i = (i + 1) % imgs.length; imgs[i].classList.add('active'); }
+  show.setAttribute('role', 'group');
+  show.setAttribute('aria-roledescription', 'carousel');
+
+  function button(cls, label, html, onClick) {
+    var b = document.createElement('button');
+    b.type = 'button';
+    b.className = cls;
+    b.setAttribute('aria-label', label);
+    b.innerHTML = html;
+    b.addEventListener('click', function (e) { e.preventDefault(); e.stopPropagation(); onClick(); restart(); });
+    return b;
+  }
+
+  var dots = document.createElement('div');
+  dots.className = 'ss-dots';
+  var dotBtns = Array.prototype.map.call(imgs, function (img, k) {
+    var d = button('ss-dot', 'Show image ' + (k + 1) + ' of ' + n, '', function () { go(k); });
+    dots.appendChild(d);
+    return d;
+  });
+
+  function go(k) {
+    imgs[i].classList.remove('active');
+    dotBtns[i].removeAttribute('aria-current');
+    i = (k + n) % n;
+    imgs[i].classList.add('active');
+    dotBtns[i].setAttribute('aria-current', 'true');
+  }
+
+  show.appendChild(button('ss-btn prev', 'Previous image', chevron('M10 3 5 8l5 5'), function () { go(i - 1); }));
+  show.appendChild(button('ss-btn next', 'Next image', chevron('M6 3l5 5-5 5'), function () { go(i + 1); }));
+  show.appendChild(dots);
+  go(0);
+
   function stop() { clearInterval(timer); timer = null; }
-  function start() { stop(); timer = setInterval(next, 4000); }
+  function restart() { stop(); if (autoplay && !paused && !document.hidden) timer = setInterval(function () { go(i + 1); }, 4000); }
+
   var card = show.closest('.entry') || show;
-  card.addEventListener('mouseenter', stop);
-  card.addEventListener('mouseleave', start);
-  card.addEventListener('focusin', stop);
-  card.addEventListener('focusout', start);
-  document.addEventListener('visibilitychange', function () { document.hidden ? stop() : start(); });
-  start();
+  card.addEventListener('mouseenter', function () { paused = true; stop(); });
+  card.addEventListener('mouseleave', function () { paused = false; restart(); });
+  card.addEventListener('focusin', function () { paused = true; stop(); });
+  card.addEventListener('focusout', function () { paused = false; restart(); });
+  document.addEventListener('visibilitychange', restart);
+
+  /* Swipe: touches land on the card's stretched link, so listen on the card and check they began on the images */
+  var x0 = null, y0 = null;
+  card.addEventListener('touchstart', function (e) {
+    var t = e.touches[0], r = show.getBoundingClientRect();
+    var inside = t.clientX >= r.left && t.clientX <= r.right && t.clientY >= r.top && t.clientY <= r.bottom;
+    x0 = inside ? t.clientX : null; y0 = t.clientY;
+  }, { passive: true });
+  card.addEventListener('touchend', function (e) {
+    if (x0 === null) return;
+    var t = e.changedTouches[0], dx = t.clientX - x0, dy = t.clientY - y0;
+    x0 = null;
+    if (Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(dy)) { go(dx < 0 ? i + 1 : i - 1); restart(); }
+  });
+
+  restart();
 });
